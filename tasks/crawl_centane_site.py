@@ -7,7 +7,7 @@ import os
 import dotenv
 dotenv.load_dotenv()
 
-query_id = "ok08hezjt5dub"
+query_id = "nha2hey2xopcy"
 conn = PostgresConnector(
     dbname=os.getenv("POSTGRES_DB"),
     user=os.getenv("POSTGRES_USER"),
@@ -19,7 +19,7 @@ conn = PostgresConnector(
 
 # Fetch data from centanet
 url = f"https://hk.centanet.com/findproperty/list/transaction?q={query_id}"
-res = requests.get(url)
+res = requests.get(url, verify=False)
 html = res.content.decode()
 
 # Parse the html
