@@ -58,8 +58,8 @@ df["query_id"] = query_id
 df["as_of_datetime"] = pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")
 
 # Load to postgres database
-conn.write_data(df, "centanet_property_transaction", 
-                if_exists="overwrite", 
+conn.write_data(df, "centaline_transaction_property", 
+                if_exists="upsert", 
                 conflict_columns=["query_id", "Date", "Address"], 
                 index=False)
 
