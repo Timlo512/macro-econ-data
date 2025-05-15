@@ -12,7 +12,7 @@ API_URL = "https://www.hkab.org.hk/api/hibor"
 
 # Define the date range
 end_date = datetime.now()
-period = os.getenv("PERIOD", 2)
+period = int(os.getenv("PERIOD", 2))
 start_date = end_date - timedelta(days=(period - 1))
 load_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
