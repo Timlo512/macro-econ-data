@@ -35,6 +35,9 @@ conn = PostgresConnector(
 )
 load_datetime = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 
+def json_dumps(x):
+    import json
+    return json.dumps(x, ensure_ascii=False)
 
 if __name__ == "__main__":
 
@@ -58,7 +61,7 @@ if __name__ == "__main__":
             # convert all dict and list columns to string
             for col in df.columns:
                 if isinstance(df[col].iloc[0], (dict, list)):
-                    df[col] = df[col].apply(lambda x: json.dumps(x, ensure_ascii=False))
+                    df[col] = df[col].apply(json_dumps)
 
             df = df.rename({"id": "transactionId"}, axis = 1)
             df["keyword"] = search_keyword
