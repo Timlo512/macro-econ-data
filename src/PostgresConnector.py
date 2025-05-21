@@ -6,10 +6,10 @@ from typing import Union
 
 _dtype_dict = {
     "float64": "float",
-    "int64": "int",
+    "int64": "float",
     "object": "varchar",
     "datetime64[ns]": "timestamp",
-    "bool": "boolean"
+    "bool": "bool"
 }
 
 class PostgresConnector:
