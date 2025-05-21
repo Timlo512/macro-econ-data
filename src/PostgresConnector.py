@@ -90,7 +90,7 @@ class PostgresConnector:
             # Create table if it doesn't exist
             if auto_create:
                 enforce_cols = kwargs.get("enforce_cols", {})
-                check = self.create_table_by_df(df, table_name, unique_cols=conflict_columns, enforce_cols=enforce_cols)
+                check = self.create_table_by_df(df, table_name, unique_cols=conflict_columns, enforce_cols=enforce_cols, with_id=kwargs.get("with_id", True))
 
             # Convert DataFrame to list of tuples
             data = [tuple(row) for row in df.to_numpy()]
