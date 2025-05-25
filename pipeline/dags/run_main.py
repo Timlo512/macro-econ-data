@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from airflow.providers.standard.operators.bash import BashOperator
 from airflow.sdk import DAG
@@ -17,5 +18,30 @@ with DAG(
     t1 = BashOperator(
         task_id = "crawl_centane_site",
         bash_command = f"cd {repo_dir}\
-            && ./.venv/bin/python3 main.py"
+            && ./.venv/bin/python3 main.py --tasks crawl_centaline_ccl"
+    )
+
+with DAG(
+    "macro_econ_data_run_main_at_1115am_daily",
+    description = "Macro Econ Data Daily Job at 11:15 AM",
+    schedule = "15 11 * * MON-FRI",
+    start_date = datetime.datetime(2025, 5, 25),
+    tags = ["macro_econ_data"],
+):
+    time.sleep(30)  # Sleep for 1 minute to ensure the DAG runs after the previous one
+    t2 = BashOperator(
+        task_id = "crawl_hkab_hibor",
+        bash_command = f"cd {repo_dir}\
+            && ./.venv/bin/python3 main.py --tasks crawl_hkab_hibor"
+    )
+
+with DAG(
+    "macro_econ_data_run_main_8am_8pm_hourly",
+    description = "Macro Econ Data Hourly Job at 8 AM and 8 PM",
+    schedule = "0 8-20 * * *",
+):
+    t3  = BashOperator(
+        task_id = "crawl_centaline_transaction",
+        bash_command = f"cd {repo_dir}\
+            && ./.venv/bin/python3 main.py --tasks crawl_centaline_transaction"
     )
