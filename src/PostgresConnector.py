@@ -153,3 +153,29 @@ class PostgresConnector:
         except Exception as e:
             print(f"Error dropping table: {e}")
             self.connection.rollback()
+
+    def validate_df(self, df: pd.DataFrame, table_name: str, table_schema: str = 'public') -> bool:
+        """
+        Validate if the DataFrame matches the table schema.
+        Args:
+            df (DataFrame): The DataFrame to validate.
+            table_name (str): The name of the table to validate against.
+        Returns:
+            bool: True if the DataFrame matches the table schema, False otherwise.
+        """
+        try:
+            self.cursor.execute(f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{table_name}' and table_schema = '{table_schema}';")
+            columns = self.cursor.fetchall()
+            column_types = {col[0]: col[1] for col in columns}
+            df_columns = [col.lower() for col in df.columns.tolist()]
+
+            for col in df_columns:
+                if col not in column_types:
+                    print(f"Column {col} does not exist in table {table_name}.")
+            for col in column_types:
+                if col not in df_columns:
+                    print(f"Column {col} is missing from DataFrame.")
+            return True
+        except Exception as e:
+            print(f"Error validating DataFrame: {e}")
+            return False
