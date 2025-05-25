@@ -72,10 +72,12 @@ if __name__ == "__main__":
             print(df.head())
             
             # Save the DataFrame to PostgreSQL
-            conn.write_data(df, "centaline_ccl_index", 
+            check = conn.write_data(df, "centaline_ccl_index", 
                     if_exists="upsert", 
                     conflict_columns=["index_type", "publishDate"],
                     index=False)
+            if not check:
+                raise Exception("Failed to write data to PostgreSQL.")
             print(f"Data saved to table 'centaline_ccl_index' for index type {index_type}.")
         else:
             print(f"Request failed with status code: {response.status_code}")

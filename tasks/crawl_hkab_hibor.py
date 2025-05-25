@@ -99,8 +99,10 @@ if __name__ == "__main__":
     print(df.columns)
 
     # Save the DataFrame to PostgreSQL
-    conn.write_data(df, "hkab_hibor", 
+    check = conn.write_data(df, "hkab_hibor", 
             if_exists="upsert", 
             conflict_columns=["snapshot_date"],
             index=False)
+    if not check:
+        raise ValueError("Failed to write data to PostgreSQL")
     print(f"Data saved to table 'hkab_hibor'")
