@@ -69,8 +69,13 @@ if __name__ == "__main__":
             df["load_datetime"] = load_datetime
 
             # add regdate as null if missing
-            if "regDate" not in df.columns:
-                df["regDate"] = None
+            missing_columns = ["regDate", "prevRegDate", "prevInsDate", "gainPercent", "heldDay", "prevTransactionPrice"] # Hard coded for now
+            for col in missing_columns:
+                if col not in df.columns:
+                    df[col] = None
+
+            # Validate the DataFrame and Table
+            conn.validate_df(df, "centaline_transaction")
 
             # Save the DataFrame to PostgreSQL
             check = conn.write_data(df, "centaline_transaction", 
