@@ -1,5 +1,4 @@
 import datetime
-import time
 
 from airflow.providers.standard.operators.bash import BashOperator
 from airflow.sdk import DAG
@@ -22,13 +21,12 @@ with DAG(
     )
 
 with DAG(
-    "macro_econ_data_run_main_at_1115am_daily",
-    description = "Macro Econ Data Daily Job at 11:15 AM",
-    schedule = "15 11 * * MON-FRI",
+    "macro_econ_data_run_main_at_1116am_daily",
+    description = "Macro Econ Data Daily Job at 11:16 AM (wait for 1 minute after HKAB refreshed)",
+    schedule = "16 11 * * MON-FRI",
     start_date = datetime.datetime(2025, 5, 25),
     tags = ["macro_econ_data"],
 ):
-    time.sleep(30)  # Sleep for 1 minute to ensure the DAG runs after the previous one
     t2 = BashOperator(
         task_id = "crawl_hkab_hibor",
         bash_command = f"cd {repo_dir}\
