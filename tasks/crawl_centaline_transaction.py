@@ -34,6 +34,7 @@ conn = PostgresConnector(
     port=os.getenv("POSTGRES_PORT")
 )
 load_datetime = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+random_wait = int(os.getenv("RANDOM_WAIT", 0)) # seconds
 
 def json_dumps(x):
     import json
@@ -67,11 +68,17 @@ if __name__ == "__main__":
             df["keyword"] = search_keyword
             df["load_datetime"] = load_datetime
 
+            # add regdate as null if missing
+            if "regDate" not in df.columns:
+                df["regDate"] = None
+
             # Save the DataFrame to PostgreSQL
-            conn.write_data(df, "centaline_transaction", 
+            check = conn.write_data(df, "centaline_transaction", 
                     if_exists="upsert", 
                     conflict_columns=["transactionId"],
                     index=False)
+            if not check:
+                raise ValueError("Failed to write data to PostgreSQL")
             print(f"Data saved to table 'centaline_transaction'")
         else:
             print(f"Request failed with status code: {response.status_code}")

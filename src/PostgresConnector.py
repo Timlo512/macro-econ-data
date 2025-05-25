@@ -119,9 +119,11 @@ class PostgresConnector:
             # Execute insert query
             self.cursor.executemany(insert_query, data)
             self.connection.commit()
+            return True
         except Exception as e:
             print(f"Error writing data: {e}")
             self.connection.rollback()
+            return False
 
     def delete_data(self, table_name, condition):
         """
