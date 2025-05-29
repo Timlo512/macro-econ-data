@@ -17,7 +17,7 @@ payload = {
     "order": "Descending",
     "pageSource": "search",
     "postType": "Sale",
-    "size": 24,
+    "size": 100,
     "sort": "InsOrRegDate"
 }
 
