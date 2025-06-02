@@ -10,9 +10,9 @@
 This library is ideal for developers looking to integrate macroeconomic data into their applications or analytics pipelines.
 
 # Upcoming data pipelines:
-### US Federal Data
-### China Data
-### JP Gov Data
+### CCL index from Centaline
+### Deal transaction (Sale) Centaline
+### Hibor Rate from HKAB
 
 ## Declaration
 All methodologies and implementations provided in this library are intended for **personal use only**. Users are responsible for ensuring compliance with any applicable laws, regulations, or terms of service when using this library.
