@@ -16,8 +16,9 @@ conn = PostgresConnector(
     port=os.getenv("POSTGRES_PORT")
 )
 
+url = "https://www.interactivebrokers.com.hk/en/trading/margin-rates.php"
+
 def fetch_ib_margin_page():
-    url = "https://www.interactivebrokers.com.hk/en/trading/margin-rates.php"
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -129,17 +130,15 @@ def main():
         
         # Process DataFrame to fill currencies
         df = process_dataframe(df)
-        
-        # Save to CSV
-        df.to_csv('ib_margin_rates.csv', index=False)
-        print("Data saved to 'ib_margin_rates.csv'")
+        df["as_of_date"] = pd.Timestamp.now().strftime("%Y-%m-%d")
+        df["as_of_datetime"] = pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")
+        df["source_url"] = url
         
         # Load to postgres database
         conn.write_data(df, "market_data.ib_margin_rates", 
                         if_exists="upsert", 
-                        conflict_columns=["currency", "tier"], 
+                        conflict_columns=["currency", "tier", "as_of_date"], 
                         index=False)
-
 
         return df
     else:
