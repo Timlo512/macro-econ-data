@@ -21,7 +21,10 @@ def main():
             with open(task) as f:
                 code = f.read()
                 print(f"Executing {task}")
-                exec(code)
+                try:
+                    exec(code)
+                except Exception as e:
+                    print(f"Error executing {task}: {e}")
 
 if __name__ == "__main__":
     main()
